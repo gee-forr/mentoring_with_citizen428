@@ -1,14 +1,10 @@
 class BookUtils
     def self.valid_isbn13?(isbn)
-        isbn  = isbn.to_s.gsub('-', '')
-        check = 0
+        isbn_nums = isbn.to_s.gsub('-', '').split('').map { |n| n.to_i }
+        check     = 0
 
-        (0..13).step(2) do |i|
-            check += isbn.slice(i, 1).to_i
-        end
-
-        (1..12).step(2) do |i|
-            check += 3 * isbn.slice(i, 1).to_i
+        isbn_nums.each_with_index do |num, index|
+            check += (index.next.odd?) ? num : num * 3
         end
 
         check % 10 == 0
