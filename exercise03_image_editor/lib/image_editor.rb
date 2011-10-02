@@ -1,9 +1,12 @@
+require 'pry'
+
 class ImageEditor
     WHITE = 'O'
 
     attr_reader :grid
 
     def initialize(width = 2, height = 2)
+        @found_neighbours = [] # Used for filling
         @width  = width
         @height = height
         @grid   = Array.new(@height) do
@@ -38,10 +41,29 @@ class ImageEditor
     end
 
     def fill(row, col, colour)
+        @neighbours = find_neighbours(row, col)
+
+        walk_grid(row, col, colour)
+
 
     end
 
+
+
     private
+    
+    def walk_grid(row, col, colour)
+        begin
+            @neighbours.each do |x, y|
+                next if neighbours_found?(x, y)
+                n_row = x + 1
+                n_col = y + 1
+                binding.pry
+
+                @neighbours << find_neighbours(n_row, n_col)
+            end
+        end until found_all_neighbours?
+    end
 
     def find_neighbours(row, col)
         x          = row - 1
@@ -58,22 +80,38 @@ class ImageEditor
 
         # bottom neighbour
         unless row == rows # If we're not already at the bottom row
-            neighbours << [x + 1, y] if 
+            neighbours << [x + 1, y] if pixel(x + 1, y) == colour
         end
 
         # left neighbour
         unless col == 1 # If we're not already on the left-most column
-            neighbours << [x, y - 1]
+            neighbours << [x, y - 1] if pixel(x, y - 1) == colour
         end
 
         # right neighbour
         unless col == cols # If we're not already on the right most column
-            neighbours << [x, y + 1]
+            neighbours << [x, y + 1] if pixel(x, y + 1) == colour
         end
+
+        neighbours_found(x, y) # Mark that we've found neighbours for this pixel
+        neighbours
     end
 
-    def get_pixel_colour(x, y) # Note, 0-indexed
+    def pixel(x, y) # Note, 0-indexed lookup
         @grid[x][y]
+    end
+
+    def neighbours_found(x, y)
+        @found_neighbours << [x, y]
+    end
+
+    def neighbours_found?(x, y)
+        @found_neighbours.index([x, y]) ? true : false
+    end
+
+    def found_all_neighbours?
+        @neighbours_found.sort == @neighbours.sort
+        binding.pry
     end
 end
 
