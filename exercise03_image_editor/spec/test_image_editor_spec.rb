@@ -46,5 +46,13 @@ describe ImageEditor do
           @image.vertical_segment(3, 2, 4, "V")
           @image.to_s.must_equal "OOOOO\nOOVOO\nOOVOO\nOOVOO\n"
       end
+
+      it "should be able to fill an area with a colour" do
+          @image.horizontal_segment(1, 1, 5, 'X')
+          @image.vertical_segment(3, 1, 3, 'X')
+          @image.fill(2, 1, 'S')
+
+          @image.to_s.must_equal "XXXXX\nSSXSS\nSSXSS\nSSSSS\n"
+      end
   end
 end
