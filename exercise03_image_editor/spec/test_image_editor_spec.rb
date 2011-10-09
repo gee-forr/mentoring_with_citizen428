@@ -25,6 +25,13 @@ describe ImageEditor do
                               ['O', 'O', 'O', 'O', 'O'],
                               ['O', 'O', 'O', 'O', 'O']]
   end
+  
+  it "should be able to tell when a pixel is out of bounds" do
+    @image.pixel_in_bounds?(1, 1).must_equal   true
+    @image.pixel_in_bounds?(10, 10).wont_equal true
+    @image.pixel_in_bounds?(4, 10).wont_equal  true
+    @image.pixel_in_bounds?(10, 5).wont_equal  true
+  end
 
   describe "editing features" do
       it "should be able to fill a single pixel" do
@@ -54,5 +61,6 @@ describe ImageEditor do
 
           @image.to_s.must_equal "XXXXX\nSSXSS\nSSXSS\nSSSSS\n"
       end
+
   end
 end

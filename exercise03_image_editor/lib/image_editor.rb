@@ -48,6 +48,14 @@ class ImageEditor
         flood_fill(x, y, old_colour, colour)
     end
 
+    def pixel_in_bounds?(row, col)
+        return false if row < 1 || col < 1
+        return false if row > @grid.size
+        return false if col > @grid[0].size
+
+        true
+    end
+
     # Private method pixels are referenced by 0-indexed coords
     private
 

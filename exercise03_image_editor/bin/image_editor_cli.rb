@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require '../lib/image_editor'
+require_relative '../lib/image_editor'
 
 class String
   def prompt(options = {})
@@ -30,4 +30,31 @@ class IO
   end
 end
 
+allowed_commands = %w{I C L V H F S X ?}
+command          = "Welcome to a simple image editing simulator.\nType ? for help, or a command to get started: ".prompt same_line: true
+image            = ImageEditor.new
 
+loop do
+    commands = command.upcase.split
+    main_cmd = commands[0]
+    break if main_cmd == 'X'
+
+    if allowed_commands.index(main_cmd)
+        case main_cmd
+        when 'I'
+            image = ImageEditor.new(commands[1], commands[2])
+        when 'C'
+            image.clear
+        when 'L'
+
+
+        end
+
+    else
+        puts "I don't have a '#{main_cmd}' command. Type ? for help."
+    end
+
+    command = "Enter a command: ".prompt same_line: true
+end
+
+puts "Goodbye"
