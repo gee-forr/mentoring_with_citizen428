@@ -69,17 +69,10 @@ class ImageEditor
         col        = x.next
         right_most = @grid[0].size
 
-        # Fill pixel above
-        flood_fill(x, y - 1, old_colour, new_colour) unless row == 1
-        
-        # Fill pixel below
-        flood_fill(x, y + 1, old_colour, new_colour) unless row == bottom
-        
-        # Fill pixel to the left
-        flood_fill(x - 1, y, old_colour, new_colour) unless col == 1
-
-        # Fill pixel to the right
-        flood_fill(x + 1, y, old_colour, new_colour) unless col == right_most
+        flood_fill(x, y - 1, old_colour, new_colour) unless row == 1          # Fill pixel above
+        flood_fill(x, y + 1, old_colour, new_colour) unless row == bottom     # Fill pixel below
+        flood_fill(x - 1, y, old_colour, new_colour) unless col == 1          # Fill pixel to the left
+        flood_fill(x + 1, y, old_colour, new_colour) unless col == right_most # Fill pixel to the right
     end
 
     def pixel(x, y) # Note, 0-indexed lookup
