@@ -1,82 +1,92 @@
 require 'pry'
 
 class ImageEditor
-    WHITE = 'O'
+  WHITE = 'O'
 
-    attr_reader :grid
+  attr_reader :grid
 
-    def initialize(width = 2, height = 2)
-        @found_neighbours = [] # Used for filling
-        @width  = width
-        @height = height
-        @grid   = Array.new(@height) do
-            Array.new(@width, WHITE)
-        end
+  def initialize(width = 2, height = 2)
+    @found_neighbours = [] # Used for filling
+    @width  = width
+    @height = height
+
+    # I'd just write Array.new(@height) { Array.new(@width, WHITE) }
+    @grid   = Array.new(@height) do
+      Array.new(@width, WHITE)
     end
+  end
 
-    def to_s
-        @grid.inject('') do |output, row|
-            output += row.join('') + "\n"
-        end
+  def to_s
+    @grid.inject('') do |output, row|
+      # output += "#{row.join('')\n" creates less temp strings
+      # also look into String#<<
+      output += row.join('') + "\n"
     end
+  end
 
-    def clear
-        initialize(@width, @height)
+  def clear
+    # I told Daniel the same, manually calling initialize is a smell
+    # Why not implement the actual clearing here and call that from initialize?
+    initialize(@width, @height)
+  end
+
+  def colour_pixel(row, col, colour)
+    @grid[row - 1][col - 1] = colour
+  end
+
+  def horizontal_segment(row, start, stop, colour)
+    adj_start = start - 1
+    adj_stop  = stop  - 1
+    @grid[row-1].fill(colour, (adj_start..adj_stop))
+  end
+
+  def vertical_segment(col, start, stop, colour)
+    (start..stop).each do |row|
+      colour_pixel(row, col, colour)
     end
+  end
 
-    def colour_pixel(row, col, colour)
-        @grid[row - 1][col - 1] = colour
-    end
+  def fill(row, col, colour)
+    x          = col - 1
+    y          = row - 1
+    old_colour = pixel(x, y)
 
-    def horizontal_segment(row, start, stop, colour)
-        adj_start = start - 1
-        adj_stop  = stop  - 1
-        @grid[row-1].fill(colour, (adj_start..adj_stop))
-    end
+    flood_fill(x, y, old_colour, colour)
+  end
 
-    def vertical_segment(col, start, stop, colour)
-        (start..stop).each do |row|
-            colour_pixel(row, col, colour)
-        end
-    end
+  def pixel_in_bounds?(row, col)
 
-    def fill(row, col, colour)
-        x          = col - 1
-        y          = row - 1
-        old_colour = pixel(x, y)
+    # (row < 1 || col < 1) || row > @grid.size || col > @grid[0].size
+    # this does everything your 4 lines do as does
+    # (1..@grid.size).include?(row) || (1..@grid[0].size).include?(row)
 
-        flood_fill(x, y, old_colour, colour)
-    end
+    return false if row < 1 || col < 1
+    return false if row > @grid.size
+    return false if col > @grid[0].size
 
-    def pixel_in_bounds?(row, col)
-        return false if row < 1 || col < 1
-        return false if row > @grid.size
-        return false if col > @grid[0].size
+    true
+  end
 
-        true
-    end
+  # Private method pixels are referenced by 0-indexed coords
+  private
 
-    # Private method pixels are referenced by 0-indexed coords
-    private
+  def flood_fill(x, y, old_colour, new_colour)
+    return if pixel(x, y) != old_colour
 
-    def flood_fill(x, y, old_colour, new_colour)
-        return if pixel(x, y) != old_colour
+    colour_pixel(y.next, x.next, new_colour) # colour pixel uses row, col, not x, y
 
-        colour_pixel(y.next, x.next, new_colour) # colour pixel uses row, col, not x, y
+    row        = y.next
+    bottom     = @grid.size
+    col        = x.next
+    right_most = @grid[0].size
 
-        # Some useful vars to help find bounds
-        row        = y.next
-        bottom     = @grid.size
-        col        = x.next
-        right_most = @grid[0].size
+    flood_fill(x, y - 1, old_colour, new_colour) unless row == 1          # Fill pixel above
+    flood_fill(x, y + 1, old_colour, new_colour) unless row == bottom     # Fill pixel below
+    flood_fill(x - 1, y, old_colour, new_colour) unless col == 1          # Fill pixel to the left
+    flood_fill(x + 1, y, old_colour, new_colour) unless col == right_most # Fill pixel to the right
+  end
 
-        flood_fill(x, y - 1, old_colour, new_colour) unless row == 1          # Fill pixel above
-        flood_fill(x, y + 1, old_colour, new_colour) unless row == bottom     # Fill pixel below
-        flood_fill(x - 1, y, old_colour, new_colour) unless col == 1          # Fill pixel to the left
-        flood_fill(x + 1, y, old_colour, new_colour) unless col == right_most # Fill pixel to the right
-    end
-
-    def pixel(x, y) # Note, 0-indexed lookup
-        @grid[y][x]
-    end
+  def pixel(x, y) # Note, 0-indexed lookup
+    @grid[y][x]
+  end
 end
