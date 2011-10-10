@@ -64,6 +64,7 @@ class ImageEditor
 
         colour_pixel(y.next, x.next, new_colour) # colour pixel uses row, col, not x, y
 
+        # Some useful vars to help find bounds
         row        = y.next
         bottom     = @grid.size
         col        = x.next
