@@ -20,13 +20,19 @@ describe SubArraySum do
       answer[1].must_equal [4, -1, 2, 1]
     end
 
-    it "should find n for this array" do
+    it "should find 5 for this array" do
       #[-4, 4, -1, -1, 3, -6, -1, 3]
       answer = SubArraySum.biggest_subarray [-4, 4, -1, -1, 3, -6, -1, 3]
 
       answer.must_be_instance_of Array
       answer[0].must_equal 5
       answer[1].must_equal [4, -1, -1, 3]
+    end
+
+    it "should return nil when it finds no usable answer" do
+      answer = SubArraySum.biggest_subarray [-1, -2, -3]
+
+      answer.must_be_nil
     end
   end
 end
