@@ -36,5 +36,11 @@ describe Array do
         [-1, -2, -3].biggest_subarray
       end.must_raise RuntimeError
     end
+
+    it "should raise an exception when there are no positive numbers, and at least one zero" do
+      proc do
+        [0, -1, -2, -3].biggest_subarray
+      end.must_raise RuntimeError
+    end
   end
 end
