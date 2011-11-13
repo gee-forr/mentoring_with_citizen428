@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 
 require 'minitest/spec'
 require 'minitest/autorun'
@@ -19,10 +20,10 @@ describe SubtitleShifter do
 
     it "should have some parsed data" do
       first_sub = srt.subtitles.first
-      first_sub.must_be_instance_of Hash
+      first_sub.must_be_instance_of Array
 
       first_sub[:index].must_equal 46
-      first_sub[:text].must_equal "♪ Our whole universee\nwas in a hot, dense state ♪"
+      first_sub[:text].must_equal  "♪ Our whole universe\nwas in a hot, dense state ♪"
     end
   end
 end
