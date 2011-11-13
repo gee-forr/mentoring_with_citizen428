@@ -1,0 +1,2 @@
+class SubtitleShifter
+end
