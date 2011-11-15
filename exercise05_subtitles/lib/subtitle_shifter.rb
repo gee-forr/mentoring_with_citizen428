@@ -19,6 +19,8 @@ class SubtitleShifter
       @subtitles.update extract_sub_data(subtitle)
     end
 
+    fix_first_index # What a hack :(
+
     @parsed_ok = true # Not very useful, but will help when error checking is added
   end
 
@@ -57,4 +59,17 @@ class SubtitleShifter
      ms:    $4.to_i
     }
   end
+
+  def fix_first_index
+    # This makes me feel *so* dirty :/
+    sub_arr = @subtitles.to_a
+    idx1    = sub_arr[0][0]
+    idx2    = sub_arr[1][0]
+
+    @subtitles[idx2 - 1] = @subtitles.delete idx1 # At least I learnt this trick :) How to rename a hash key
+  end
 end
+
+
+
+
