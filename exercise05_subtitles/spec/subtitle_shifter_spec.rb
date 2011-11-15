@@ -12,18 +12,18 @@ describe SubtitleShifter do
   end
 
   describe "parsing a subtitle file" do
-    srt = SubtitleShifter.new('The.Big.Bang.Theory.srt')
+    srt = SubtitleShifter.new('./spec/The.Big.Bang.Theory.srt')
+    srt.parse
 
     it "should work with utf-8 files" do
-      srt.parsed_ok.must_be true
+      srt.parsed_ok.must_equal true
     end
 
     it "should have some parsed data" do
-      first_sub = srt.subtitles.first
-      first_sub.must_be_instance_of Array
+      first_sub = srt.subtitles[46]
+      first_sub.must_be_instance_of Hash
 
-      first_sub[:index].must_equal 46
-      first_sub[:text].must_equal  "♪ Our whole universe\nwas in a hot, dense state ♪"
+      first_sub[:subtitle].must_equal  "♪ Our whole universe\r\nwas in a hot, dense state ♪"
     end
   end
 end
