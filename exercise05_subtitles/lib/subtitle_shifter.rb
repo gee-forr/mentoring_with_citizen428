@@ -11,24 +11,38 @@ class SubtitleShifter
   end
 
   def parse
-    raw_text       = IO.read(@sub_file)
-    subtitle_parts = raw_text.split("#{@linebreak}#{@linebreak}")
+    raw_text       = IO.read @sub_file
+    subtitle_parts = raw_text.split "#{@linebreak}#{@linebreak}"
     @subtitles     = {}
 
     subtitle_parts.each do |subtitle|
-      @subtitles.update extract_sub_data(subtitle)
+      @subtitles.update extract_sub_data subtitle
     end
 
-    fix_first_index # What a hack :(
-
+    fix_first_index   # What a hack :(
     @parsed_ok = true # Not very useful, but will help when error checking is added
+  end
+
+  def shift(args)
+    index = args[:index]
+    shift = args[:time]
+
+    loop do
+      break unless @subtitles.has_key?(index)
+
+      @subtitles[index][:start] += shift
+      @subtitles[index][:end]   += shift
+
+      index += 1
+
+    end
   end
 
   private
 
   def extract_sub_data(subtitle)
-    s     = subtitle.split(@linebreak)
-    times = s[1].split(" #{TIME_SEPERATOR} ")
+    s     = subtitle.split @linebreak
+    times = s[1].split " #{TIME_SEPERATOR} "
 
     {s[0].to_i => {
       start:    srt_time_to_ms(times[0]),
@@ -39,7 +53,7 @@ class SubtitleShifter
   end
 
   def srt_time_to_ms (srt_time)
-    time_parts = parse_srt_time(srt_time)
+    time_parts = parse_srt_time srt_time
 
     hours_ms = time_parts[:hours] * 60 * 60 * 1000
     mins_ms  = time_parts[:mins]  * 60 * 1000
