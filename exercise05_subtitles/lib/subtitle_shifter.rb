@@ -88,9 +88,9 @@ class SubtitleShifter
   end
 
   def ms_to_srt_time(ms)
-    hours   = (ms / (1000 *60 *60)) % 60
-    minutes = (ms / (1000 *60) )    % 60
-    seconds = (ms / 1000)           % 60
+    hours   = (ms / (1000 * 60 *60)) % 60
+    minutes = (ms / (1000 * 60))     % 60
+    seconds = (ms / 1000)            % 60
     adj_ms  = ms.to_s[-3..-1].to_i
 
     "%02d:%02d:%02d,%03d" % [hours, minutes, seconds, adj_ms]
