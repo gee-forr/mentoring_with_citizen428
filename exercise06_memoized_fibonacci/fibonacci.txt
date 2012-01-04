@@ -1,0 +1,8 @@
+I want you to write a memoized Fibonacci program.
+
+By memoized I mean that no result should be calculated twice, 
+and instead previous computation get reused.
+
+Now for an extra challenge: make this as simple as possible. Be creative,
+use Ruby in unexpected ways, suprise me!
+
