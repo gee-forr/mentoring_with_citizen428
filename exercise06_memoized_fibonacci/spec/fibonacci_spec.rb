@@ -6,6 +6,16 @@ require 'minitest/autorun'
 
 require './lib/fibonacci'
 
+fibs = {
+  0 => 0,
+  1 => 1,
+  2 => 1,
+  3 => 2,
+  4 => 3,
+  5 => 5,
+  6 => 8,
+}
+
 def fib_seq_test_name(n, m)
   # Just so I don't have to type out the whole test title again and again
   "should result in #{n} for fib sequence #{m}"
@@ -17,28 +27,12 @@ describe Fibonacci do
   end
 
   describe "calculations" do
-    it fib_seq_test_name(0, 0) do
-      Fibonacci.fib(0).must_equal 0
+
+    fibs.each do |n, m|
+      it fib_seq_test_name(n, m) do
+        Fibonacci.fib(n).must_equal m
+      end
     end
 
-    it fib_seq_test_name(1, 1) do
-      Fibonacci.fib(1).must_equal 1
-    end
-
-    it fib_seq_test_name(1, 2) do
-      Fibonacci.fib(2).must_equal 1
-    end
-
-    it fib_seq_test_name(2, 3) do
-      Fibonacci.fib(3).must_equal 2
-    end
-
-    it fib_seq_test_name(3, 4) do
-      Fibonacci.fib(4).must_equal 3
-    end
-
-    it fib_seq_test_name(5, 5) do
-      Fibonacci.fib(5).must_equal 5
-    end
   end
 end
