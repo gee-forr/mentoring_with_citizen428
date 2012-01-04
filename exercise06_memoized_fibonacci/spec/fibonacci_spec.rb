@@ -32,5 +32,9 @@ describe Fibonacci do
     it fib_seq_test_name(2, 3) do
       Fibonacci.fib(3).must_equal 2
     end
+
+    it fib_seq_test_name(3, 4) do
+      Fibonacci.fib(4).must_equal 3
+    end
   end
 end
