@@ -1,11 +1,9 @@
 class Fibonacci
   def self.fib(n)
-    if n == 0
-      return 0
-    elsif n < 3
-      return 1
+    if n < 2
+      return n
     else
-      return 2
+      return n - 1
     end
   end
 end
